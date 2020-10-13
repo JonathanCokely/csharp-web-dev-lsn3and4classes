@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml.Schema;
+
 namespace SchoolPractice
 {
     public class Student
@@ -31,19 +33,64 @@ namespace SchoolPractice
         public void AddGrade(int courseCredits, double grade)
         {
             // Update the appropriate properties: NumberOfCredits, Gpa
-            NumberOfCredits = courseCredits;
-            Gpa = grade;
+            
+            Gpa = ((Gpa*NumberOfCredits)+(grade*courseCredits))/(NumberOfCredits+courseCredits);
+            NumberOfCredits += courseCredits;
+
+
         }
 
         //TODO: Complete the GetGradeLevel method here:
         public string GetGradeLevel(int credits)
         {
+            string GradeLevel = "grade level tbd";
             // Determine the grade level of the student based on NumberOfCredits
-            return "grade level tbd";
+            if(credits < 29)
+            { 
+                GradeLevel = "Freshman";
+            }
+
+            if(credits >= 30 && credits < 59)
+            { 
+                GradeLevel = "Sophomore";
+            }
+
+            if(credits >= 60 && credits < 89)
+            { 
+                GradeLevel = "Junior";
+            }
+
+            if(credits > 90)
+            {
+                GradeLevel = "Senior";
+            }
+
+            return GradeLevel;
+        }
+
+        public override string ToString()
+        {
+            return Name + "(Credits: " + NumberOfCredits + " )";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Student student &&
+                   Name == student.Name &&
+                   StudentId == student.StudentId &&
+                   NumberOfCredits == student.NumberOfCredits &&
+                   Gpa == student.Gpa;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, StudentId, NumberOfCredits, Gpa);
         }
 
         // TODO: Add your custom 'ToString' method here. Make sure it returns a well-formatted string rather
         //  than just the class fields.
+
+
 
         // TODO: Add your custom 'Equals' method here. Consider which fields should match in order to call two
         //  Student objects equal.
